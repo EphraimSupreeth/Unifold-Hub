@@ -196,7 +196,7 @@ function renderQrDesigner() {
       const area = document.createElement('textarea'); area.value = encodedValue; area.style.cssText = 'position:fixed;opacity:0'; document.body.append(area); area.select();
       const copied = document.execCommand('copy'); area.remove(); if (!copied) throw Error('Clipboard access is unavailable.');
     }
-    setStatus('Encoded text copied to the clipboard.');
+    window.notify?.success('Encoded text copied to the clipboard.', { dedupeKey: 'qr-copy' });
   }
   function doAction(action) {
     if (!matrix || !lastSvg) throw Error('Generate a valid QR code before exporting.');
@@ -204,7 +204,15 @@ function renderQrDesigner() {
     if (action === 'png') {
       const canvas = document.querySelector('#qrd-preview canvas');
       if (!canvas) throw Error('QR preview is not available for PNG export.');
-      canvas.toBlob((blob) => blob ? downloadBlob(blob, 'unifold-qr-code.png') : setStatus('Your browser could not export this QR code as PNG.', true), 'image/png');
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          setStatus('Your browser could not export this QR code as PNG.', true);
+          window.notify?.error('The browser could not export this QR code as PNG. Try SVG export instead.');
+          return;
+        }
+        downloadBlob(blob, 'unifold-qr-code.png');
+        window.notify?.success('QR code PNG export is ready.', { dedupeKey: 'qr-export-png' });
+      }, 'image/png');
     }
     if (action === 'print') {
       const printWindow = window.open('', '_blank');
@@ -214,7 +222,10 @@ function renderQrDesigner() {
       printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>QR Code</title><style>@page{margin:18mm}body{margin:0;min-height:90vh;display:grid;place-items:center;font:16px sans-serif}svg{width:min(85vw,120mm);height:auto}</style></head><body>${lastSvg}<script>window.addEventListener('load',()=>window.print())<\/script></body></html>`);
       printWindow.document.close();
     }
-    if (action !== 'copy') setStatus(action === 'print' ? 'Print-friendly page opened.' : `QR code ${action.toUpperCase()} export prepared.`);
+    if (action === 'svg' || action === 'print') {
+      const message = action === 'print' ? 'Print-friendly QR page opened.' : 'QR code SVG export is ready.';
+      (action === 'print' ? window.notify?.info : window.notify?.success)?.(message, { dedupeKey: `qr-export-${action}` });
+    }
   }
   document.addEventListener('input', (event) => {
     if (active() && event.target.closest('#tool-content') && event.target.id.startsWith('qrd-')) updatePreview();
@@ -236,11 +247,20 @@ function renderQrDesigner() {
     const button = event.target.closest('[data-qrd-action]');
     if (!button) return;
     event.preventDefault();
+    const action = button.dataset.qrdAction;
     try {
-      const action = button.dataset.qrdAction;
-      if (action === 'copy') copyPayload().catch((error) => setStatus(error.message, true));
+      if (action === 'copy') copyPayload().catch((error) => {
+        setStatus(error.message, true);
+        if (error.message.includes('Clipboard')) window.notify?.error('Clipboard access was blocked. Check browser permissions and try again.', { dedupeKey: 'qr-copy-failure' });
+        else window.notify?.validation(error.message, { dedupeKey: 'qr-copy-validation' });
+      });
       else doAction(action);
-    } catch (error) { setStatus(error.message || 'The requested action could not be completed.', true); }
+    } catch (error) {
+      const message = error.message || 'The requested action could not be completed.';
+      setStatus(message, true);
+      if (action === 'print' && message.includes('pop-ups')) window.notify?.error('The print page was blocked. Allow pop-ups for this site and try again.', { dedupeKey: 'qr-print-popup' });
+      else window.notify?.validation(message, { dedupeKey: 'qr-action-validation' });
+    }
   });
   document.addEventListener('click', (event) => {
     const card = event.target.closest('.tool-card[data-name="QR Code Designer"]');
