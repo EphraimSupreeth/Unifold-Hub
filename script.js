@@ -431,6 +431,7 @@ const CURRENCIES = [['INR','Indian rupee'],['USD','US dollar'],['EUR','Euro'],['
 const CONVERTER_ZONES = [['America/Los_Angeles','Los Angeles'],['America/Denver','Denver'],['America/Chicago','Chicago'],['America/New_York','New York'],['America/Toronto','Toronto'],['America/Sao_Paulo','São Paulo'],['Europe/London','London'],['Europe/Paris','Paris'],['Europe/Berlin','Berlin'],['Africa/Johannesburg','Johannesburg'],['Asia/Dubai','Dubai'],['Asia/Kolkata','Mumbai / Kolkata'],['Asia/Singapore','Singapore'],['Asia/Tokyo','Tokyo'],['Australia/Sydney','Sydney'],['Pacific/Auckland','Auckland']];
 let currencyRateDate = '';
 let currencyRequestId = 0;
+let currencyNoticeId = null;
 
 function unitOptions(category, selected) {
   return Object.entries(unitSets[category]).map(([key, details]) => `<option value="${key}" ${key === selected ? 'selected' : ''}>${details[0]}</option>`).join('');
@@ -549,6 +550,9 @@ async function fetchCurrencyRate() {
   const requestId = ++currencyRequestId;
   currencyRateDate = '';
   if (from === to) { currencyRateDate = 'Same currency; no exchange rate needed'; document.querySelector('#unit-currency-rate').value = '1'; status.textContent = currencyRateDate; updateCurrencyConverter(); return; }
+  if (currencyNoticeId) window.notify?.dismiss(currencyNoticeId);
+  const loadingId = window.notify?.loading('Fetching the latest reference rate…', { dedupeKey: `currency-rate-fetch-${requestId}` });
+  currencyNoticeId = loadingId;
   status.textContent = 'Fetching reference rate from Frankfurter…';
   try {
     const response = await fetch(`https://api.frankfurter.dev/v1/latest?base=${encodeURIComponent(from)}&symbols=${encodeURIComponent(to)}`);
@@ -556,14 +560,24 @@ async function fetchCurrencyRate() {
     const data = await response.json();
     const rate = data?.rates?.[to];
     if (!Number.isFinite(rate) || rate <= 0 || !data.date) throw new Error('The rate service did not return a valid rate.');
-    if (requestId !== currencyRequestId) return;
+    if (requestId !== currencyRequestId) {
+      if (loadingId) window.notify?.dismiss(loadingId);
+      if (currencyNoticeId === loadingId) currencyNoticeId = null;
+      return;
+    }
     currencyRateDate = data.date;
     document.querySelector('#unit-currency-rate').value = String(rate);
     status.textContent = `ECB reference rate · date ${data.date}. Not a real-time trading quote.`;
     updateCurrencyConverter();
+    if (loadingId) window.notify?.update(loadingId, { type: 'success', title: 'Reference rate updated', message: `Rate loaded for ${from} to ${to} · ${data.date}.`, duration: 4500, persistent: false });
   } catch (error) {
-    if (requestId !== currencyRequestId) return;
+    if (requestId !== currencyRequestId) {
+      if (loadingId) window.notify?.dismiss(loadingId);
+      if (currencyNoticeId === loadingId) currencyNoticeId = null;
+      return;
+    }
     status.textContent = `${error.message} Enter a manual rate above; no live rate is assumed.`;
+    if (loadingId) window.notify?.update(loadingId, { type: 'error', title: 'Rate unavailable', message: 'Could not fetch a reference rate. Check your connection or enter a manual rate.', duration: 0, persistent: true });
     updateCurrencyConverter();
   }
 }
@@ -587,12 +601,17 @@ document.addEventListener('change', (event) => {
   if (activeTool !== 'Unit Converter') return;
   const id = event.target.id;
   if (id === 'unit-category') {
+    currencyRequestId += 1;
+    if (currencyNoticeId) window.notify?.dismiss(currencyNoticeId);
+    currencyNoticeId = null;
     converterCategory = event.target.value;
     currencyRateDate = '';
     updateConverterUnits(); updateConverter();
   } else if (['unit-zone-datetime', 'unit-zone-from', 'unit-zone-to'].includes(id)) updateZoneConverter();
   else if (id === 'unit-currency-from' || id === 'unit-currency-to') {
     currencyRequestId += 1; currencyRateDate = '';
+    if (currencyNoticeId) window.notify?.dismiss(currencyNoticeId);
+    currencyNoticeId = null;
     document.querySelector('#unit-currency-rate').value = '';
     document.querySelector('#unit-currency-status').textContent = 'Currency pair changed. Fetch a new reference rate or enter a manual rate.';
     updateCurrencyConverter();
