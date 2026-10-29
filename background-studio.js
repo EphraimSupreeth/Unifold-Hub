@@ -1,0 +1,335 @@
+(() => {
+  const TOOL_NAME = 'Background Studio';
+  const categoryMap = window.UNIFOLD_TOOL_CATEGORIES || (window.UNIFOLD_TOOL_CATEGORIES = {});
+  categoryMap[TOOL_NAME] = 'image';
+
+  const source = document.querySelector('#tool-grid');
+  if (source && !document.querySelector(`.tool-card[data-name="${TOOL_NAME}"]`)) {
+    const card = document.createElement('article');
+    card.className = 'tool-card';
+    card.dataset.name = TOOL_NAME;
+    card.dataset.category = 'image';
+    card.dataset.keywords = 'background blur replace color segmentation image';
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-haspopup', 'dialog');
+    card.setAttribute('aria-label', 'Open Background Studio');
+    card.tabIndex = 0;
+    card.innerHTML = '<div class="card-top"><span class="tool-icon icon-indigo" aria-hidden="true">◐</span><span class="coming-soon">Open Tool →</span></div><h3>Background Studio</h3><p>Blur or replace an image background using local subject segmentation.</p>';
+    source.append(card);
+  }
+
+  const previousRender = window.UnifoldNewTools?.render;
+  if (typeof previousRender === 'function') {
+    window.UnifoldNewTools.render = function (name) {
+      if (name === TOOL_NAME) return renderStudio();
+      return previousRender.call(this, name);
+    };
+  }
+
+  const MODEL_VERSION = '0.1.1675465747';
+  const MODEL_SCRIPT = `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@${MODEL_VERSION}/selfie_segmentation.js`;
+  const MODEL_ROOT = `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@${MODEL_VERSION}/`;
+  const MAX_FILE_BYTES = 20 * 1024 * 1024;
+  const MAX_PIXELS = 12_000_000;
+  const state = { image: null, sourceUrl: null, outputUrl: null, mode: 'blur', color: '#FFFFFF', blur: 14, maskCanvas: null, segmenter: null, loadingModel: null, job: 0, renderJob: 0, busy: false };
+  const $ = (id) => document.getElementById(id);
+
+  function renderStudio() {
+    return `<div class="bg-studio">
+      <p class="tool-message bg-privacy">Processing stays in this browser. The free MediaPipe segmentation runtime and model are downloaded from jsDelivr on first use (several MB); your image is not uploaded. Segmentation is optimized for people and may not isolate other subjects accurately.</p>
+      <label class="tool-field">Choose a JPG, PNG, or WebP image<input class="tool-input" id="bg-upload" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"></label>
+      <div class="bg-mode-tabs" role="group" aria-label="Background editing mode"><button class="tool-tab is-active" type="button" data-bg-mode="blur" aria-pressed="true">Blur background</button><button class="tool-tab" type="button" data-bg-mode="color" aria-pressed="false">Change color</button></div>
+      <div class="bg-options" data-bg-options="blur"><label class="tool-field">Blur strength <span class="bg-range"><input id="bg-blur" type="range" min="0" max="30" value="14"><output id="bg-blur-value">14 px</output></span></label></div>
+      <div class="bg-options" data-bg-options="color" hidden><span class="bg-option-label">Background color</span><div class="bg-presets" aria-label="Background color presets">${[['#FFFFFF','White'],['#000000','Black'],['#808080','Gray'],['#4B8FE2','Blue'],['#39A875','Green'],['#F28DB2','Pink'],['#F1C75B','Yellow'],['#7957FF','Violet']].map(([color,label])=>`<button type="button" class="bg-color-swatch${color==='#FFFFFF'?' is-selected':''}" data-bg-color="${color}" style="--bg-swatch:${color}" aria-label="${label} background" title="${label}"></button>`).join('')}<label class="bg-custom-color">Custom<input type="color" id="bg-custom-color" value="#ffffff" aria-label="Choose a custom background color"></label></div></div>
+      <div class="bg-previews"><figure><figcaption>Original</figcaption><div class="bg-preview-frame"><img id="bg-original-preview" alt="Original uploaded image" hidden><span id="bg-original-placeholder">Upload an image to start.</span></div></figure><figure><figcaption>Result</figcaption><div class="bg-preview-frame bg-checker"><img id="bg-result-preview" alt="Edited image preview" hidden><span id="bg-result-placeholder">Your edited preview will appear here.</span></div></figure></div>
+      <p class="tool-message" id="bg-status" role="status" aria-live="polite">Choose an image to load the local segmentation model.</p>
+      <div class="tool-actions"><button class="tool-button" type="button" data-bg-action="reset">Reset</button><a class="tool-button primary bg-download" id="bg-download" href="#" download="unifold-background.png" aria-disabled="true">Download PNG</a></div>
+    </div>`;
+  }
+
+  function status(text, kind = '') {
+    const node = $('bg-status');
+    if (node) { node.textContent = text; node.className = `tool-message${kind ? ` ${kind}` : ''}`; }
+  }
+
+  function releaseOutput() {
+    if (state.outputUrl) URL.revokeObjectURL(state.outputUrl);
+    state.outputUrl = null;
+  }
+
+  function cleanup() {
+    state.job += 1;
+    state.renderJob += 1;
+    state.busy = false;
+    if ($('bg-upload')) $('bg-upload').disabled = false;
+    if (state.sourceUrl) URL.revokeObjectURL(state.sourceUrl);
+    state.sourceUrl = null;
+    releaseOutput();
+    state.image = null;
+    state.maskCanvas = null;
+  }
+
+  function loadSegmenter() {
+    if (state.segmenter) return Promise.resolve(state.segmenter);
+    if (state.loadingModel) return state.loadingModel;
+    state.loadingModel = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = MODEL_SCRIPT;
+      script.async = true;
+      script.onload = () => {
+        try {
+          if (typeof window.SelfieSegmentation !== 'function') throw new Error('The segmentation library loaded but is unavailable in this browser.');
+          const segmenter = new window.SelfieSegmentation({ locateFile: (file) => `${MODEL_ROOT}${file}` });
+          // Model 0 is the general-purpose model; model 1 is tuned for landscape video.
+          segmenter.setOptions({ modelSelection: 0 });
+          segmenter.initialize().then(() => {
+            state.segmenter = segmenter;
+            resolve(segmenter);
+          }).catch(() => reject(new Error('The segmentation model could not initialize. Check your connection and browser support.')));
+        } catch (error) { reject(error); }
+      };
+      script.onerror = () => reject(new Error('Could not download the free segmentation runtime. Check your connection and try again.'));
+      document.head.append(script);
+    }).catch((error) => { state.loadingModel = null; throw error; });
+    return state.loadingModel;
+  }
+
+  function segment(image, segmenter) {
+    return new Promise((resolve, reject) => {
+      let settled = false;
+      let timeout;
+      const finish = (callback, value) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+        callback(value);
+      };
+      timeout = setTimeout(() => finish(reject, new Error('Subject detection timed out. Check browser support and try again.')), 30000);
+      segmenter.onResults((results) => {
+        if (!results?.segmentationMask) finish(reject, new Error('The model did not return a subject mask for this image.'));
+        else finish(resolve, results.segmentationMask);
+      });
+      segmenter.send({ image }).catch(() => finish(reject, new Error('Subject segmentation failed. Try a smaller or different image.')));
+    });
+  }
+
+  function makeMaskCanvas(mask, width, height) {
+    const maskWidth = mask.width || mask.videoWidth || mask.naturalWidth;
+    const maskHeight = mask.height || mask.videoHeight || mask.naturalHeight;
+    if (!maskWidth || !maskHeight) throw new Error('The model returned a mask with invalid dimensions. Try another image.');
+    const imageAspect = width / height;
+    const maskAspect = maskWidth / maskHeight;
+    if (Math.abs(maskAspect / imageAspect - 1) > 0.03) {
+      throw new Error('The model returned a mask with mismatched image dimensions. No cropped result was exported; try another image or browser.');
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width; canvas.height = height;
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context) throw new Error('Canvas image processing is unavailable in this browser.');
+    context.clearRect(0, 0, width, height);
+    context.imageSmoothingEnabled = true;
+    const scale = Math.min(width / maskWidth, height / maskHeight);
+    const drawWidth = maskWidth * scale;
+    const drawHeight = maskHeight * scale;
+    context.drawImage(mask, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
+
+    const pixels = context.getImageData(0, 0, width, height);
+    let minRgb = 255, maxRgb = 0, minAlpha = 255, maxAlpha = 0;
+    for (let i = 0; i < pixels.data.length; i += 4) {
+      const data = pixels.data;
+      const rgb = Math.round((data[i] + data[i + 1] + data[i + 2]) / 3);
+      minRgb = Math.min(minRgb, rgb); maxRgb = Math.max(maxRgb, rgb);
+      minAlpha = Math.min(minAlpha, data[i + 3]); maxAlpha = Math.max(maxAlpha, data[i + 3]);
+    }
+    const useAlphaMask = maxRgb - minRgb < 8 && maxAlpha - minAlpha >= 8;
+    let minCoverage = 255, maxCoverage = 0;
+    for (let i = 0; i < pixels.data.length; i += 4) {
+      const data = pixels.data;
+      const rgb = Math.round((data[i] + data[i + 1] + data[i + 2]) / 3);
+      const coverage = useAlphaMask ? data[i + 3] : Math.round(rgb * data[i + 3] / 255);
+      minCoverage = Math.min(minCoverage, coverage); maxCoverage = Math.max(maxCoverage, coverage);
+      data[i] = 255; data[i + 1] = 255; data[i + 2] = 255; data[i + 3] = coverage;
+    }
+    if (maxCoverage - minCoverage < 8) {
+      throw new Error('The model returned an almost uniform mask, so the subject could not be separated reliably. Try a clear photo of a person with a distinct background.');
+    }
+    context.putImageData(pixels, 0, 0);
+    return canvas;
+  }
+
+  async function loadImage(file) {
+    cleanup();
+    const job = state.job;
+    const oldOriginal = $('bg-original-preview'), oldResult = $('bg-result-preview');
+    if (oldOriginal) { oldOriginal.removeAttribute('src'); oldOriginal.hidden = true; $('bg-original-placeholder').hidden = false; }
+    if (oldResult) { oldResult.removeAttribute('src'); oldResult.hidden = true; $('bg-result-placeholder').hidden = false; }
+    const oldLink = $('bg-download');
+    if (oldLink) { oldLink.removeAttribute('href'); oldLink.setAttribute('aria-disabled', 'true'); }
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    const extensionAllowed = /\.(jpe?g|png|webp)$/i.test(file?.name || '');
+    if (!file) return;
+    if ((!allowed.includes(file.type) && !(!file.type && extensionAllowed)) || !extensionAllowed) {
+      status('Choose a JPG, PNG, or WebP image supported by this browser.', 'error'); return;
+    }
+    if (file.size > MAX_FILE_BYTES) { status('This file is larger than 20 MB. Choose a smaller image.', 'error'); return; }
+    status('Reading image locally…');
+    const url = URL.createObjectURL(file);
+    state.sourceUrl = url;
+    const image = new Image();
+    image.onload = async () => {
+      if (job !== state.job || !$('bg-upload')) return;
+      try {
+        const pixels = image.naturalWidth * image.naturalHeight;
+        if (!image.naturalWidth || !image.naturalHeight) throw new Error('The selected image has no usable dimensions.');
+        if (pixels > MAX_PIXELS) throw new Error('Image exceeds the 12-megapixel safety limit. Resize it yourself to preserve predictable browser memory use, then upload again; the studio does not silently reduce resolution.');
+        state.image = image;
+        $('bg-original-preview').src = url;
+        $('bg-original-preview').hidden = false;
+        $('bg-original-placeholder').hidden = true;
+        state.busy = true;
+        $('bg-upload').disabled = true;
+        status('Loading the free segmentation model…');
+        const segmenter = await loadSegmenter();
+        if (job !== state.job) return;
+        status('Detecting the foreground subject locally…');
+        const mask = await segment(image, segmenter);
+        if (job !== state.job) return;
+        state.maskCanvas = makeMaskCanvas(mask, image.naturalWidth, image.naturalHeight);
+        state.busy = false;
+        $('bg-upload').disabled = false;
+        await renderResult(file.name);
+      } catch (error) {
+        if (job === state.job) { state.busy = false; $('bg-upload').disabled = false; status(error.message || 'Image could not be processed.', 'error'); }
+      }
+    };
+    image.onerror = () => { if (job === state.job) { $('bg-upload').disabled = false; status('Image could not be decoded. Try a valid JPG, PNG, or WebP file.', 'error'); } };
+    image.src = url;
+  }
+
+  function makeResultCanvas() {
+    const image = state.image;
+    if (!image || !state.maskCanvas) throw new Error('Upload an image and wait for subject detection first.');
+    const canvas = document.createElement('canvas');
+    canvas.width = image.naturalWidth; canvas.height = image.naturalHeight;
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('Canvas image processing is unavailable in this browser.');
+    if (state.mode === 'blur') {
+      context.filter = `blur(${state.blur}px)`;
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      context.filter = 'none';
+    } else if (state.mode === 'color') {
+      context.fillStyle = state.color;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    const subject = document.createElement('canvas');
+    subject.width = canvas.width; subject.height = canvas.height;
+    const subjectContext = subject.getContext('2d');
+    subjectContext.drawImage(image, 0, 0, canvas.width, canvas.height);
+    subjectContext.globalCompositeOperation = 'destination-in';
+    subjectContext.drawImage(state.maskCanvas, 0, 0);
+    context.drawImage(subject, 0, 0);
+    return canvas;
+  }
+
+  async function renderResult(filename = 'image') {
+    if (!state.image || !state.maskCanvas || state.busy) return;
+    const job = state.job;
+    const renderJob = ++state.renderJob;
+    releaseOutput();
+    const oldPreview = $('bg-result-preview');
+    if (oldPreview) { oldPreview.removeAttribute('src'); oldPreview.hidden = true; }
+    if ($('bg-result-placeholder')) $('bg-result-placeholder').hidden = false;
+    const oldLink = $('bg-download');
+    if (oldLink) { oldLink.removeAttribute('href'); oldLink.setAttribute('aria-disabled', 'true'); }
+    try {
+      status('Applying background edit…');
+      const canvas = makeResultCanvas();
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+      if (!blob) throw new Error('Your browser could not export this image as PNG.');
+      if (job !== state.job || renderJob !== state.renderJob || !$('bg-upload')) return;
+      releaseOutput();
+      state.outputUrl = URL.createObjectURL(blob);
+      const preview = $('bg-result-preview');
+      preview.src = state.outputUrl;
+      preview.hidden = false;
+      $('bg-result-placeholder').hidden = true;
+      const link = $('bg-download');
+      link.href = state.outputUrl;
+      link.download = `${filename.replace(/\.[^.]+$/, '')}-background.png`;
+      link.setAttribute('aria-disabled', 'false');
+      status('Preview ready. PNG export keeps the uploaded image’s full resolution.', 'success');
+    } catch (error) {
+      if (job === state.job && renderJob === state.renderJob) status(error.message || 'Could not render this edit.', 'error');
+    }
+  }
+
+  function updateMode(mode) {
+    state.mode = mode;
+    document.querySelectorAll('[data-bg-mode]').forEach((button) => {
+      const selected = button.dataset.bgMode === mode;
+      button.classList.toggle('is-active', selected);
+      button.setAttribute('aria-pressed', String(selected));
+    });
+    document.querySelectorAll('[data-bg-options]').forEach((panel) => { panel.hidden = panel.dataset.bgOptions !== mode; });
+    if (state.maskCanvas) renderResult($('bg-upload')?.files?.[0]?.name || 'image');
+    else if (state.image) status('Waiting for foreground detection to finish…');
+  }
+
+  function reset() {
+    cleanup();
+    const upload = $('bg-upload');
+    if (upload) upload.value = '';
+    const original = $('bg-original-preview'), result = $('bg-result-preview');
+    if (original) { original.removeAttribute('src'); original.hidden = true; }
+    if (result) { result.removeAttribute('src'); result.hidden = true; }
+    if ($('bg-original-placeholder')) $('bg-original-placeholder').hidden = false;
+    if ($('bg-result-placeholder')) $('bg-result-placeholder').hidden = false;
+    const link = $('bg-download');
+    if (link) { link.removeAttribute('href'); link.setAttribute('aria-disabled', 'true'); }
+    state.mode = 'blur'; state.color = '#FFFFFF'; state.blur = 14;
+    if ($('bg-blur')) $('bg-blur').value = '14';
+    if ($('bg-blur-value')) $('bg-blur-value').textContent = '14 px';
+    if ($('bg-custom-color')) $('bg-custom-color').value = '#ffffff';
+    document.querySelectorAll('[data-bg-color]').forEach((button) => button.classList.toggle('is-selected', button.dataset.bgColor === '#FFFFFF'));
+    updateMode('blur');
+    status('Choose an image to load the local segmentation model.');
+  }
+
+  document.addEventListener('change', (event) => {
+    if (!$('bg-upload')) return;
+    if (event.target.id === 'bg-upload') loadImage(event.target.files?.[0]);
+    if (event.target.id === 'bg-custom-color') {
+      state.color = event.target.value.toUpperCase();
+      document.querySelectorAll('[data-bg-color]').forEach((button) => button.classList.remove('is-selected'));
+      if (state.mode === 'color') renderResult($('bg-upload')?.files?.[0]?.name || 'image');
+    }
+  });
+
+  document.addEventListener('input', (event) => {
+    if (!$('bg-upload')) return;
+    if (event.target.id === 'bg-blur') {
+      state.blur = Number(event.target.value);
+      $('bg-blur-value').textContent = `${state.blur} px`;
+      if (state.mode === 'blur') renderResult($('bg-upload')?.files?.[0]?.name || 'image');
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!$('bg-upload')) return;
+    const modeButton = event.target.closest('[data-bg-mode]');
+    if (modeButton) { updateMode(modeButton.dataset.bgMode); return; }
+    const colorButton = event.target.closest('[data-bg-color]');
+    if (colorButton) {
+      state.color = colorButton.dataset.bgColor;
+      $('bg-custom-color').value = state.color.toLowerCase();
+      document.querySelectorAll('[data-bg-color]').forEach((button) => button.classList.toggle('is-selected', button === colorButton));
+      if (state.mode === 'color') renderResult($('bg-upload')?.files?.[0]?.name || 'image');
+      return;
+    }
+    if (event.target.closest('[data-bg-action="reset"]')) reset();
+  });
+
+  const content = document.querySelector('#tool-content');
+  if (content) new MutationObserver(() => { if (!$('bg-upload') && (state.sourceUrl || state.outputUrl)) cleanup(); }).observe(content, { childList: true });
+})();

@@ -1,0 +1,43 @@
+.chess-layout { display: grid; grid-template-columns: minmax(240px, 1.05fr) minmax(220px, .95fr); gap: 20px; align-items: start; }
+.chess-layout > div:first-child { min-width: 0; }
+.chess-board { container-type: inline-size; box-sizing: border-box; width: min(100%, 460px); aspect-ratio: 1; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); grid-template-rows: repeat(8, minmax(0, 1fr)); gap: 0; overflow: hidden; margin: 12px auto 0; border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); touch-action: manipulation; }
+.chess-square { position: relative; min-width: 0; padding: 0; display: grid; place-items: center; border: 0; border-radius: 0; cursor: pointer; }
+.chess-square.light { background: #f0d9b5; }
+.chess-square.dark { background: #9a6848; }
+.chess-square.selected { box-shadow: inset 0 0 0 4px #f5d547; }
+.chess-square.legal-target::after { position: absolute; width: 24%; aspect-ratio: 1; border-radius: 50%; background: #28754d99; content: ''; }
+.chess-square.legal-target:has(.chess-piece)::after { width: 90%; height: 90%; border: 4px solid #28754d99; background: transparent; }
+.chess-piece { position: relative; z-index: 1; display: block; width: 100%; font-family: 'Segoe UI Symbol', 'Noto Sans Symbols 2', serif; font-size: clamp(16px, 9.5cqw, 48px); line-height: 1; text-align: center; cursor: grab; user-select: none; }
+.white-piece { color: #fffdf3; -webkit-text-stroke: 1px #3d3a35; text-shadow: 0 1px 2px #30251e; }
+.black-piece { color: #25232a; -webkit-text-stroke: .5px #fff; text-shadow: 0 1px 1px #fff8; }
+.chess-coordinate { position: absolute; z-index: 2; font-size: clamp(8px, 1.4vw, 11px); line-height: 1; font-weight: 800; pointer-events: none; }
+.chess-coordinate.rank { top: 3px; left: 4px; }
+.chess-coordinate.file { right: 4px; bottom: 3px; }
+.chess-square.light .chess-coordinate { color: #805e43; }
+.chess-square.dark .chess-coordinate { color: #f0d9b5; }
+.chess-side { min-width: 0; }
+.chess-side .tool-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.chess-subheading { margin: 18px 0 8px; font-size: 14px; }
+.chess-history { max-height: 145px; margin: 0 0 15px; padding: 10px 12px 10px 34px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--page); color: var(--text); font-size: 12px; line-height: 1.8; }
+.chess-fen { min-height: 68px; margin: 7px 0 0; font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+.research-form { display: grid; gap: 9px; }
+.research-search-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 9px; }
+.research-results { display: grid; gap: 10px; margin-top: 13px; }
+.research-card { display: flex; gap: 13px; min-width: 0; padding: 13px; border: 1px solid var(--line); border-radius: 13px; background: var(--surface); }
+.research-card > img { width: 78px; height: 78px; flex: none; object-fit: cover; border-radius: 9px; background: var(--page); }
+.research-card-body { min-width: 0; }
+.research-card h3 { margin: 0 0 5px; color: var(--text); font-size: 14px; overflow-wrap: anywhere; }
+.research-card p { margin: 0 0 10px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+.research-link { display: inline-flex; align-items: center; text-decoration: none; }
+@media (max-width: 620px) {
+  .chess-layout { grid-template-columns: minmax(0, 1fr); }
+  .chess-board { width: min(100%, 460px); margin-right: auto; margin-left: auto; }
+  .chess-side { width: 100%; }
+  .chess-piece { font-size: clamp(16px, 9.5cqw, 44px); }
+  .chess-coordinate { font-size: 9px; }
+}
+@media (max-width: 390px) {
+  .research-card { gap: 9px; padding: 10px; }
+  .research-card > img { width: 60px; height: 60px; }
+  .research-search-row { grid-template-columns: 1fr; }
+}

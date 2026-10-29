@@ -1,0 +1,38 @@
+/* Shared layouts for the browser-based studio tools. */
+.markdown-columns, .diff-columns { align-items: start; }
+.markdown-preview { min-height: 270px; max-height: 520px; overflow: auto; background: var(--surface); color: var(--text); font-weight: 400; line-height: 1.6; }
+.markdown-preview h1, .markdown-preview h2, .markdown-preview h3 { margin: .8em 0 .4em; }
+.markdown-preview p { margin: .6em 0; }
+.markdown-preview pre, .markdown-preview code { padding: .15em .35em; border-radius: 5px; background: var(--page); font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.markdown-preview pre { padding: 10px; overflow: auto; }
+.markdown-preview pre code { padding: 0; }
+.markdown-preview table { border-collapse: collapse; width: 100%; }
+.markdown-preview th, .markdown-preview td { border: 1px solid var(--line); padding: 6px; text-align: left; }
+.markdown-preview a { color: var(--accent-strong); text-decoration: underline; }
+.diff-output { max-height: 420px; margin-top: 14px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--page); }
+.diff-row { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.diff-row span { min-width: 0; padding: 5px 8px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.diff-row span + span { border-left: 1px solid var(--line); }
+.diff-add { background: color-mix(in srgb, #38a881 13%, var(--surface)); }
+.diff-del { background: color-mix(in srgb, #d15a66 13%, var(--surface)); }
+.gradient-stop { align-items: end; margin-top: 10px; }
+.gradient-stop .tool-field { flex: 1; min-width: 130px; }
+#palette-swatches { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 14px; }
+#palette-swatches .tool-stat { min-height: 106px; display: flex; flex-direction: column; justify-content: end; gap: 5px; overflow-wrap: anywhere; }
+#palette-swatches .tool-stat strong { font-size: 12px; }
+#palette-swatches .tool-stat span { color: inherit; font-size: 10px; }
+#palette-swatches .tool-actions { gap: 4px; margin-top: 5px; }
+#palette-swatches .tool-button { min-height: 27px; padding: 0 6px; border-color: color-mix(in srgb, currentColor 25%, transparent); background: color-mix(in srgb, currentColor 10%, transparent); color: inherit; font-size: 9px; }
+#shadow-preview { color: var(--text); }
+#regex-result mark { padding: 1px 2px; border-radius: 3px; background: #ffe58a; color: #151a35; }
+#regex-status { white-space: pre-wrap; }
+#team-output p { margin: 5px 0; }
+#tz-output { white-space: pre-line; }
+.tool-dialog fieldset.tool-form-grid { margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 10px; }
+.tool-dialog fieldset label { color: var(--muted); font-size: 12px; }
+@media (max-width: 620px) {
+  .markdown-columns, .diff-columns { grid-template-columns: 1fr; }
+  #palette-swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .diff-row { grid-template-columns: 1fr; }
+  .diff-row span + span { border-left: 0; border-top: 1px solid var(--line); }
+}

@@ -1,0 +1,441 @@
+/* Subtle visual polish layered over the existing Unifold design system. */
+:root {
+  --ambient-gradient: linear-gradient(135deg, #F7F9FB 0%, #F7F9FB 58%, #EAF5F3 100%);
+}
+
+:root[data-theme="dark"] {
+  --ambient-gradient: linear-gradient(135deg, #17212B 0%, #17212B 58%, #253746 100%);
+}
+
+html {
+  background: var(--page);
+  background-image: var(--ambient-gradient);
+  background-attachment: fixed;
+  transition: background-color .25s ease;
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+
+/* Two softly colored, fixed layers stay behind page content and never catch input. */
+body::before,
+body::after {
+  position: fixed;
+  z-index: 0;
+  inset: -8vh -5vw;
+  display: block;
+  content: "";
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+body::before {
+  background:
+    radial-gradient(circle at 13% 16%, rgba(15, 159, 145, .12) 0, rgba(15, 159, 145, .04) 7%, transparent 19%),
+    radial-gradient(circle at 83% 23%, rgba(37, 55, 70, .11) 0, rgba(37, 55, 70, .035) 8%, transparent 20%),
+    radial-gradient(circle at 66% 79%, rgba(15, 159, 145, .10) 0, rgba(234, 245, 243, .10) 8%, transparent 21%);
+  animation: unifold-bubbles-drift 48s ease-in-out infinite alternate;
+}
+
+body::after {
+  background:
+    radial-gradient(circle at 39% 43%, rgba(15, 159, 145, .08) 0, rgba(15, 159, 145, .025) 6%, transparent 17%),
+    radial-gradient(circle at 93% 72%, rgba(37, 55, 70, .09) 0, rgba(15, 159, 145, .025) 7%, transparent 18%);
+  animation: unifold-bubbles-drift-reverse 59s ease-in-out infinite alternate;
+}
+
+body > main,
+body > .site-footer {
+  z-index: 1;
+}
+
+body > main,
+body > .site-footer {
+  position: relative;
+}
+
+:root[data-theme="dark"] body::before {
+  background:
+    radial-gradient(circle at 13% 16%, rgba(15, 159, 145, .17) 0, rgba(15, 159, 145, .05) 8%, transparent 20%),
+    radial-gradient(circle at 83% 23%, rgba(37, 55, 70, .28) 0, rgba(37, 55, 70, .08) 8%, transparent 21%),
+    radial-gradient(circle at 66% 79%, rgba(15, 159, 145, .16) 0, rgba(15, 159, 145, .05) 8%, transparent 22%);
+}
+
+:root[data-theme="dark"] body::after {
+  background:
+    radial-gradient(circle at 39% 43%, rgba(15, 159, 145, .10) 0, rgba(15, 159, 145, .03) 6%, transparent 18%),
+    radial-gradient(circle at 93% 72%, rgba(37, 55, 70, .24) 0, rgba(15, 159, 145, .05) 7%, transparent 19%);
+}
+
+@keyframes unifold-bubbles-drift {
+  from { transform: translate3d(-.6%, -.3%, 0) scale(1); }
+  to { transform: translate3d(.7%, .5%, 0) scale(1.025); }
+}
+
+@keyframes unifold-bubbles-drift-reverse {
+  from { transform: translate3d(.5%, .4%, 0) scale(1.02); }
+  to { transform: translate3d(-.6%, -.5%, 0) scale(1); }
+}
+
+/* Opaque fallbacks precede translucent surfaces for older browsers. */
+.site-header,
+.tool-card,
+.hero-preview,
+.mini-tool-card,
+.search-wrap,
+.section-menu-panel,
+.mobile-section-menu:not([hidden]),
+.tool-dialog,
+.calculator-dialog,
+.about-strip,
+.cs-section,
+.cs-section-nav,
+.cs-swatch,
+.cs-library-card,
+.research-card,
+.bg-options,
+.bg-privacy,
+.part-a-passage,
+.part-a-event,
+.audio-merge-row {
+  background-color: var(--surface);
+}
+
+ .site-header,
+.tool-card,
+.hero-preview,
+.mini-tool-card,
+.search-wrap,
+.section-menu-panel,
+.mobile-section-menu:not([hidden]),
+.tool-dialog,
+.calculator-dialog,
+.cs-section,
+.cs-section-nav,
+.cs-swatch,
+.cs-library-card,
+.research-card,
+.bg-options,
+.bg-privacy,
+.part-a-passage,
+.part-a-event,
+.audio-merge-row {
+  background-color: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+.tool-dialog,
+.calculator-dialog {
+  background-color: color-mix(in srgb, var(--surface) 80%, transparent);
+  border-color: color-mix(in srgb, var(--line) 82%, var(--accent) 18%);
+  box-shadow: var(--shadow-hover);
+}
+
+.cs-swatch {
+  background-color: color-mix(in srgb, var(--surface) 91%, transparent);
+}
+
+.about-strip {
+  background-color: color-mix(in srgb, var(--accent-soft) 74%, transparent);
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header,
+  .section-menu-panel,
+  .mobile-section-menu:not([hidden]) {
+    -webkit-backdrop-filter: blur(14px) saturate(1.08);
+    backdrop-filter: blur(14px) saturate(1.08);
+  }
+
+  .tool-card,
+  .hero-preview,
+  .mini-tool-card,
+  .search-wrap,
+  .cs-section,
+  .cs-section-nav,
+  .cs-library-card,
+  .research-card,
+  .bg-options,
+  .bg-privacy,
+  .part-a-passage,
+  .part-a-event,
+  .audio-merge-row {
+    -webkit-backdrop-filter: blur(14px) saturate(1.08);
+    backdrop-filter: blur(14px) saturate(1.08);
+  }
+
+  .tool-dialog,
+  .calculator-dialog {
+    -webkit-backdrop-filter: blur(18px) saturate(1.08);
+    backdrop-filter: blur(18px) saturate(1.08);
+  }
+}
+
+.tool-card {
+  border-color: color-mix(in srgb, var(--line) 84%, var(--accent) 16%);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background-color .25s ease;
+}
+
+.tool-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+}
+
+.tool-icon {
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.tool-button,
+.tool-back,
+.calculator-key,
+.filter-button,
+.qrd-preset,
+.home-shortcuts button,
+.theme-toggle,
+.header-search,
+.mobile-menu-toggle,
+.favorite-toggle {
+  transition: transform .16s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease, color .18s ease;
+}
+
+.tool-button:active,
+.tool-back:active,
+.calculator-key:active,
+.filter-button:active,
+.qrd-preset:active,
+.home-shortcuts button:active,
+.theme-toggle:active,
+.header-search:active,
+.mobile-menu-toggle:active,
+.favorite-toggle:active {
+  transform: translateY(1px) scale(.985);
+}
+
+.section-menu-panel,
+.tool-dialog[open],
+.calculator-dialog[open] {
+  animation: unifold-surface-in .18s ease-out both;
+}
+
+@keyframes unifold-surface-in {
+  from { opacity: 0; transform: translateY(5px) scale(.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tool-card:hover .tool-icon {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px color-mix(in srgb, currentColor 12%, transparent);
+  }
+
+  .tool-button:hover,
+  .tool-back:hover,
+  .qrd-preset:hover,
+  .home-shortcuts button:hover,
+  .favorite-toggle:hover {
+    box-shadow: 0 5px 14px color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+}
+
+@media (max-width: 620px) {
+  body::before {
+    inset: -3vh -8vw;
+    background:
+      radial-gradient(circle at 8% 15%, rgba(15, 159, 145, .11) 0, transparent 19%),
+      radial-gradient(circle at 92% 74%, rgba(37, 55, 70, .08) 0, transparent 20%);
+    animation-duration: 64s;
+  }
+
+  body::after {
+    inset: -3vh -8vw;
+    background: radial-gradient(circle at 82% 25%, rgba(15, 159, 145, .08) 0, transparent 19%);
+    animation-duration: 72s;
+  }
+
+  :root[data-theme="dark"] body::before {
+    background:
+      radial-gradient(circle at 8% 15%, rgba(15, 159, 145, .14) 0, transparent 20%),
+      radial-gradient(circle at 92% 74%, rgba(37, 55, 70, .22) 0, transparent 21%);
+  }
+
+  :root[data-theme="dark"] body::after {
+    background: radial-gradient(circle at 82% 25%, rgba(15, 159, 145, .10) 0, transparent 20%);
+  }
+
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .site-header,
+    .section-menu-panel,
+    .mobile-section-menu:not([hidden]) {
+      -webkit-backdrop-filter: blur(9px) saturate(1.04);
+      backdrop-filter: blur(9px) saturate(1.04);
+    }
+
+    .tool-card,
+    .hero-preview,
+    .mini-tool-card,
+    .search-wrap,
+    .cs-section,
+    .cs-section-nav,
+    .cs-library-card,
+    .research-card,
+    .bg-options,
+    .bg-privacy,
+    .part-a-passage,
+    .part-a-event,
+    .audio-merge-row {
+      -webkit-backdrop-filter: blur(9px) saturate(1.04);
+      backdrop-filter: blur(9px) saturate(1.04);
+    }
+
+    .tool-dialog,
+    .calculator-dialog {
+      -webkit-backdrop-filter: blur(12px) saturate(1.04);
+      backdrop-filter: blur(12px) saturate(1.04);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .section-menu-panel,
+  .tool-dialog[open],
+  .calculator-dialog[open] {
+    animation: none !important;
+  }
+}
+
+/* Light mode uses the existing two bubble layers, tuned to the teal palette. */
+:root:not([data-theme="dark"]) body::before {
+  background:
+    radial-gradient(circle 250px at 13% 16%, rgba(15, 159, 145, .12) 0, rgba(15, 159, 145, .045) 48%, transparent 100%),
+    radial-gradient(circle 290px at 83% 23%, rgba(37, 55, 70, .09) 0, rgba(37, 55, 70, .03) 48%, transparent 100%),
+    radial-gradient(circle 270px at 66% 79%, rgba(15, 159, 145, .11) 0, rgba(234, 245, 243, .18) 48%, transparent 100%);
+}
+
+:root:not([data-theme="dark"]) body::after {
+  background:
+    radial-gradient(circle 230px at 39% 43%, rgba(15, 159, 145, .07) 0, rgba(15, 159, 145, .025) 48%, transparent 100%),
+    radial-gradient(circle 250px at 93% 72%, rgba(37, 55, 70, .08) 0, rgba(15, 159, 145, .03) 48%, transparent 100%);
+}
+
+:root:not([data-theme="dark"]) .site-header,
+:root:not([data-theme="dark"]) .tool-card,
+:root:not([data-theme="dark"]) .hero-preview,
+:root:not([data-theme="dark"]) .mini-tool-card,
+:root:not([data-theme="dark"]) .search-wrap,
+:root:not([data-theme="dark"]) .section-menu-panel,
+:root:not([data-theme="dark"]) .mobile-section-menu:not([hidden]),
+  :root:not([data-theme="dark"]) .cs-section,
+:root:not([data-theme="dark"]) .cs-section-nav,
+:root:not([data-theme="dark"]) .cs-library-card,
+:root:not([data-theme="dark"]) .research-card,
+:root:not([data-theme="dark"]) .bg-options,
+:root:not([data-theme="dark"]) .bg-privacy,
+:root:not([data-theme="dark"]) .part-a-passage,
+:root:not([data-theme="dark"]) .part-a-event,
+:root:not([data-theme="dark"]) .audio-merge-row {
+  background-color: rgba(255, 255, 255, .62);
+  border-color: color-mix(in srgb, var(--line) 72%, var(--accent) 28%);
+  box-shadow: var(--shadow);
+}
+
+.tool-card[data-name="Image Studio"],
+.tool-card[data-name="Audio Studio"],
+.tool-card[data-name="PDF & Documents Studio"] {
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--surface) 88%, transparent),
+    color-mix(in srgb, var(--accent-soft) 68%, transparent)
+  );
+}
+
+/* Keep tool outputs distinct while allowing a hint of the frosted surface through. */
+.tool-result {
+  background-color: color-mix(in srgb, var(--accent-soft) 82%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 22%, var(--line));
+}
+
+/* Keep modal headings frosted too, instead of letting the sticky title bar mask the backdrop. */
+.tool-dialog .tool-heading {
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+}
+
+.tool-dialog::backdrop,
+.calculator-dialog::backdrop {
+  background: rgba(23, 33, 43, .34);
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+}
+
+:root:not([data-theme="dark"]) .tool-dialog .tool-heading {
+  background: transparent;
+}
+
+:root[data-theme="dark"] .tool-dialog .tool-heading {
+  background: transparent;
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root:not([data-theme="dark"]) .site-header,
+  :root:not([data-theme="dark"]) .tool-card,
+  :root:not([data-theme="dark"]) .hero-preview,
+  :root:not([data-theme="dark"]) .mini-tool-card,
+  :root:not([data-theme="dark"]) .search-wrap,
+  :root:not([data-theme="dark"]) .section-menu-panel,
+  :root:not([data-theme="dark"]) .mobile-section-menu:not([hidden]),
+  :root:not([data-theme="dark"]) .cs-section,
+  :root:not([data-theme="dark"]) .cs-section-nav,
+  :root:not([data-theme="dark"]) .cs-library-card,
+  :root:not([data-theme="dark"]) .research-card {
+    -webkit-backdrop-filter: blur(16px) saturate(1.12);
+    backdrop-filter: blur(16px) saturate(1.12);
+  }
+}
+
+@media (max-width: 620px) {
+  .site-header .mobile-menu-toggle {
+    background-color: var(--surface-soft);
+    background-color: color-mix(in srgb, var(--surface-soft) 86%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
+    box-shadow: 0 4px 12px rgba(23, 33, 43, .12);
+    -webkit-backdrop-filter: blur(10px) saturate(1.08);
+    backdrop-filter: blur(10px) saturate(1.08);
+  }
+
+  :root:not([data-theme="dark"]) body::before {
+    background:
+      radial-gradient(circle 165px at 8% 15%, rgba(15, 159, 145, .11) 0, rgba(15, 159, 145, .04) 48%, transparent 100%),
+      radial-gradient(circle 185px at 92% 74%, rgba(37, 55, 70, .08) 0, rgba(37, 55, 70, .025) 48%, transparent 100%);
+  }
+
+  :root:not([data-theme="dark"]) body::after {
+    background: radial-gradient(circle 175px at 82% 25%, rgba(15, 159, 145, .08) 0, rgba(15, 159, 145, .03) 48%, transparent 100%);
+  }
+
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    :root:not([data-theme="dark"]) .site-header,
+    :root:not([data-theme="dark"]) .tool-card,
+    :root:not([data-theme="dark"]) .hero-preview,
+    :root:not([data-theme="dark"]) .mini-tool-card,
+    :root:not([data-theme="dark"]) .search-wrap,
+    :root:not([data-theme="dark"]) .section-menu-panel,
+    :root:not([data-theme="dark"]) .mobile-section-menu:not([hidden]),
+    :root:not([data-theme="dark"]) .tool-dialog,
+    :root:not([data-theme="dark"]) .calculator-dialog,
+    :root:not([data-theme="dark"]) .cs-section,
+    :root:not([data-theme="dark"]) .cs-section-nav,
+    :root:not([data-theme="dark"]) .cs-library-card,
+    :root:not([data-theme="dark"]) .research-card {
+      -webkit-backdrop-filter: blur(10px) saturate(1.08);
+      backdrop-filter: blur(10px) saturate(1.08);
+    }
+  }
+}

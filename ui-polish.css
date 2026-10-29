@@ -1,0 +1,282 @@
+/* Additive UI refinements; existing components, behavior, and design tokens stay intact. */
+.site-header {
+  background: var(--surface);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+  backdrop-filter: blur(16px) saturate(1.15);
+}
+
+@media (min-width: 821px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  }
+}
+
+.privacy-badge {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 12px 0 0 8px;
+  padding: 7px 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-soft) 68%, var(--surface));
+  color: var(--accent-strong);
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.privacy-badge svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+/* Preserve the featured studio cards while allowing the rest to auto-fit. */
+#tool-grid .tool-card,
+.tool-category-section .tool-grid .tool-card {
+  min-width: 0;
+}
+
+.tool-card:hover {
+  transform: translateY(-2px);
+}
+
+@media (min-width: 901px) {
+  .tool-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .privacy-badge {
+    margin-top: 10px;
+  }
+
+  .filters {
+    display: none;
+  }
+}
+
+/* Responsive safeguards for the shared page and its dynamically-added filters. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+}
+
+.hero-content,
+.section-heading > *,
+.tool-category-section,
+.tool-grid,
+.tool-card,
+.tool-dialog #tool-content,
+.about-strip > div {
+  min-width: 0;
+}
+
+.hero h1,
+.tool-card h3,
+.tool-card p,
+.shelf-heading h3,
+.shelf-heading span,
+.about-strip p,
+.tool-dialog,
+.tool-result,
+.tool-message {
+  overflow-wrap: anywhere;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: 7px;
+  max-width: 100%;
+  margin: 18px 0 23px;
+}
+
+.filter-button {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px 6px;
+  font-size: 10px;
+  line-height: 1.2;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.filter-button span {
+  flex: none;
+}
+
+.tool-grid > *,
+.tool-form-grid > *,
+.tool-stats > *,
+.tool-row > * {
+  min-width: 0;
+}
+
+.tool-dialog,
+.calculator-dialog {
+  max-width: calc(100vw - 24px);
+}
+
+.tool-dialog img,
+.tool-dialog canvas,
+.tool-dialog video,
+.tool-dialog pre,
+.tool-dialog table {
+  max-width: 100%;
+}
+
+@media (min-width: 1051px) {
+  .filter-button {
+    padding-right: 6px;
+    padding-left: 6px;
+    font-size: 9.5px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .filters {
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 960px) {
+  .site-header {
+    gap: 10px;
+  }
+
+  .main-nav {
+    display: none;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .mobile-section-menu:not([hidden]) {
+    position: fixed;
+    top: 77px;
+    right: 12px;
+    left: auto;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: min(360px, calc(100vw - 24px));
+    max-height: calc(100dvh - 92px);
+    overflow-y: auto;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+    box-shadow: 0 22px 60px rgba(21, 26, 53, .2);
+  }
+
+  .mobile-section-menu a {
+    min-height: 43px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 760px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-art {
+    justify-self: center;
+  }
+}
+
+@media (max-width: 620px) {
+  .filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin-right: 0;
+    margin-bottom: 18px;
+    padding: 2px 0 0;
+  }
+
+  .tool-dialog {
+    padding: 16px;
+  }
+
+  .tool-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tool-actions {
+    align-items: stretch;
+  }
+
+  .tool-actions > * {
+    max-width: 100%;
+  }
+
+  .tool-dialog .tool-heading {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .tool-dialog .tool-heading h2 {
+    font-size: clamp(19px, 6vw, 25px);
+    overflow-wrap: anywhere;
+  }
+
+  .about-strip > div {
+    flex-basis: calc(100% - 60px);
+  }
+
+  .about-strip > a {
+    margin-left: 59px;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 390px) {
+  .hero h1 {
+    font-size: clamp(34px, 10vw, 39px);
+    line-height: 1.1;
+  }
+
+  .section-heading {
+    flex-wrap: wrap;
+  }
+}
+
+/* The later global .filters display rule overrides the earlier phone hide. */
+@media (max-width: 620px) {
+  .tools-section > .filters {
+    display: none;
+  }
+}

@@ -1,0 +1,76 @@
+/* Unifold professional teal theme. Shared component behavior and geometry stay unchanged. */
+:root {
+  color-scheme: light;
+  --page: #F7F9FB;
+  --surface: #FFFFFF;
+  --surface-soft: #F0F5F6;
+  --text: #17212B;
+  --muted: #64748B;
+  --line: #E2E8F0;
+  --accent: #0F9F91;
+  --accent-strong: #0F9F91;
+  --accent-soft: #EAF5F3;
+  --accent-fill: #0F9F91;
+  --accent-fill-hover: #0F9F91;
+  --success: #18794E;
+  --warning: #8A5A00;
+  --error: #B42332;
+  --shadow: 0 8px 24px rgba(23, 33, 43, .055);
+  --shadow-hover: 0 16px 38px rgba(23, 33, 43, .12);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #17212B;
+  --surface: #17212B;
+  --surface-soft: #253746;
+  --text: #EDF4F7;
+  --muted: #A8B8C5;
+  --line: #344653;
+  --accent: #0F9F91;
+  --accent-strong: #0F9F91;
+  --accent-soft: #253746;
+  --accent-fill: #0F9F91;
+  --accent-fill-hover: #0F9F91;
+  --success: #4ADE80;
+  --warning: #FBBF24;
+  --error: #FDA4AF;
+  --shadow: 0 8px 24px rgba(0, 0, 0, .2);
+  --shadow-hover: 0 16px 38px rgba(0, 0, 0, .36);
+}
+
+.site-header { box-shadow: 0 2px 12px rgba(23, 33, 43, .035); }
+.main-nav a:hover, .section-menu summary:hover, .main-nav a.is-current,
+.section-menu[open] summary { color: var(--accent-strong); }
+.section-menu-panel a:hover, .section-menu-panel a.is-current,
+.mobile-section-menu a:hover, .mobile-section-menu a.is-current { background: var(--accent-soft); color: var(--accent-strong); }
+
+.primary-link, .filter-button.is-active, .tool-button.primary,
+.tool-tab.is-active, .calculator-key.key-equals {
+  border-color: var(--accent-fill);
+  background: var(--accent-fill);
+}
+.primary-link { box-shadow: 0 9px 22px color-mix(in srgb, var(--accent-fill) 22%, transparent); }
+.primary-link:hover, .filter-button.is-active:hover, .tool-button.primary:hover,
+.tool-tab.is-active:hover, .calculator-key.key-equals:hover {
+  border-color: var(--accent-fill-hover);
+  background: var(--accent-fill-hover);
+}
+.primary-link:hover { box-shadow: 0 10px 22px color-mix(in srgb, var(--accent-fill) 28%, transparent); }
+.tool-button.danger { color: var(--error); }
+.tool-message.error, .cs-workspace [data-state="error"] { color: var(--error); }
+.tool-message.success, .cs-workspace [data-state="success"] { color: var(--success); }
+.tool-message.warning, .cs-workspace [data-state="warning"] { color: var(--warning); }
+.tool-select option { background: var(--surface); color: var(--text); }
+
+/* Keep the hero illustration in the shared palette without changing its layout. */
+.preview-shape span { background: linear-gradient(140deg, #EAF5F3, #CDE9E4); }
+.preview-shape span:nth-child(2), .preview-shape span:nth-child(3),
+.preview-shape span:nth-child(4) { background: linear-gradient(140deg, #EAF5F3, #CDE9E4); }
+.preview-progress span { background: linear-gradient(90deg, var(--accent-fill), var(--accent)); }
+.sparkle-two { color: var(--accent); }
+
+/* Tool-specific icon colors, chess squares, user-created colors, and status visuals remain intact. */
+
+/* The old home shelf host stays inert for compatibility with existing hooks. */
+#home-shelves { display: none !important; }

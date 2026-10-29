@@ -1,0 +1,49 @@
+.part-a-stack { display: grid; gap: 14px; }
+.part-a-passage { padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--page); color: var(--text); font-size: 15px; line-height: 1.8; }
+.part-a-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+.part-a-check { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+.part-a-diff-columns { align-items: start; }
+.part-diff-output { min-height: 110px; max-height: 360px; overflow: auto; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--page); color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.65; }
+.part-diff-output ins, .part-diff-add { color: #167448; background: #ddf5e8; text-decoration: none; }
+.part-diff-output del, .part-diff-del { color: #a72e3d; background: #ffe4e7; text-decoration: line-through; }
+.part-diff-change { display: inline; }
+.part-diff-change ins, .part-diff-change del { margin: 0 1px; }
+.part-a-crop-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.part-a-image-preview { min-height: 160px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 10px; overflow: hidden; background-color: #fff; background-image: linear-gradient(45deg,#e2e4ea 25%,transparent 25%),linear-gradient(-45deg,#e2e4ea 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e2e4ea 75%),linear-gradient(-45deg,transparent 75%,#e2e4ea 75%); background-position: 0 0,0 8px,8px -8px,-8px 0; background-size: 16px 16px; }
+.part-a-image-preview figure { min-width: 0; margin: 0; }
+.part-a-image-preview figcaption { margin-bottom: 6px; color: var(--muted); font-size: 11px; font-weight: 700; }
+.part-a-image-preview img, .part-a-image-preview canvas { display: block; width: 100%; max-height: 360px; object-fit: contain; }
+.part-a-image-preview > span { grid-column: 1 / -1; text-align: center; }
+.part-a-event-list { display: grid; gap: 10px; }
+.part-a-event { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px; border: 1px solid var(--line); border-radius: 12px; background: var(--page); }
+.part-a-event h3, .part-a-event p { margin: 0 0 5px; }
+.part-a-event h3 { color: var(--text); font-size: 15px; }
+.part-a-event p, .part-a-event strong { color: var(--muted); font-size: 12px; }
+.part-a-resume-preview { width: 100%; padding: 26px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: #202637; line-height: 1.55; }
+.part-a-resume-preview h1 { margin: 0; color: #1d2c49; font-size: 29px; }
+.part-a-resume-preview header { padding-bottom: 13px; border-bottom: 2px solid #4776bd; }
+.part-a-resume-preview .resume-contact { margin: 5px 0 0; color: #596579; font-size: 12px; }
+.part-a-resume-preview section { margin-top: 15px; }
+.part-a-resume-preview section h2 { margin: 0 0 5px; color: #315f9f; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+.part-a-resume-preview section p { margin: 0; white-space: normal; overflow-wrap: anywhere; font-size: 13px; }
+.part-a-resume-preview.resume-modern { border-top: 7px solid #39a875; }
+.part-a-resume-preview.resume-modern header { border-color: #39a875; }
+.part-a-resume-preview.resume-modern section h2 { color: #247856; }
+.part-a-resume-preview.resume-classic { font-family: Georgia, serif; }
+.part-a-resume-preview.resume-classic header { text-align: center; border-bottom: 1px solid #555; }
+.part-a-resume-preview.resume-classic section h2 { color: #333; border-bottom: 1px solid #bbb; }
+@media (max-width: 560px) {
+  .part-a-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .part-a-crop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .part-a-event { align-items: flex-start; flex-direction: column; }
+  .part-a-resume-preview { padding: 17px; }
+}
+@media print {
+  body.printing-resume * { visibility: hidden !important; }
+  body.printing-resume #tool-dialog[open], body.printing-resume #tool-dialog[open] #tool-content, body.printing-resume #tool-dialog[open] #resume-preview, body.printing-resume #tool-dialog[open] #resume-preview * { visibility: visible !important; }
+  body.printing-resume #tool-dialog[open] { position: fixed !important; inset: 0 !important; width: 100% !important; max-width: none !important; max-height: none !important; margin: 0 !important; padding: 0 !important; overflow: visible !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; background: #fff !important; }
+  body.printing-resume #tool-dialog[open] #tool-content { display: block !important; }
+  body.printing-resume #tool-dialog[open] #tool-content > :not(.part-a-resume) { display: none !important; }
+  body.printing-resume #tool-dialog[open] .part-a-resume > :not(#resume-preview) { display: none !important; }
+  body.printing-resume #tool-dialog[open] #resume-preview { display: block !important; width: 100% !important; min-height: 100vh; margin: 0 !important; padding: 18mm !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
+}

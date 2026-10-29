@@ -1,0 +1,28 @@
+/* Backup snapshot of the effective shared palette before the color-only update.
+   The original styles.css is also retained unchanged for full stylesheet rollback. */
+:root {
+  --page: #ffffff;
+  --surface: #ffffff;
+  --surface-soft: #f7f7fb;
+  --text: #151a35;
+  --muted: #687086;
+  --line: #e5e7ef;
+  --accent: #7957ff;
+  --accent-strong: #6342ed;
+  --accent-soft: #f0edff;
+  --shadow: 0 8px 24px rgba(21, 26, 53, .055);
+  --shadow-hover: 0 16px 38px rgba(21, 26, 53, .12);
+}
+:root[data-theme="dark"] {
+  --page: #111322;
+  --surface: #191c2e;
+  --surface-soft: #22253a;
+  --text: #f4f5ff;
+  --muted: #a5abc0;
+  --line: #30344b;
+  --accent: #9c86ff;
+  --accent-strong: #b8a9ff;
+  --accent-soft: #2c2849;
+  --shadow: 0 8px 24px rgba(0, 0, 0, .18);
+  --shadow-hover: 0 16px 38px rgba(0, 0, 0, .32);
+}

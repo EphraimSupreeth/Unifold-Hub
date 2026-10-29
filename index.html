@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F7F9FB" />
+    <meta name="description" content="Unifold — Everything you need all in one." />
+    <title>Unifold — Everything you need all in one</title>
+    <script>
+      try {
+        const theme = localStorage.getItem('everyday-tools-theme');
+        document.documentElement.dataset.theme = theme === 'dark' || theme === 'light'
+          ? theme
+          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      } catch {
+        document.documentElement.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="new-tools.css" />
+    <link rel="stylesheet" href="ui-polish.css" />
+    <link rel="stylesheet" href="chess-research.css" />
+    <link rel="stylesheet" href="color-studio.css" />
+    <link rel="stylesheet" href="csv-viewer.css" />
+    <link rel="stylesheet" href="background-studio.css" />
+    <link rel="stylesheet" href="part-a-tools.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="qr-designer.css" />
+    <link rel="stylesheet" href="premium-polish.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand brand-image-link" href="#home" aria-label="Unifold home">
+        <img class="brand-image" src="https://uploads.onecompiler.io/44t258rvg/ai-1793098951277/everyday-tools-image.jpeg" alt="Unifold — Everything you need. All in one." style="width: 56px; height: 56px; max-width: 100%; object-fit: contain; transform: none;" />
+      </a>
+
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="main-nav-home" href="#home">Home</a>
+        <a href="#utilities-section">Utilities</a>
+        <a href="#image-section">Image</a>
+        <a href="#audio-section">Audio</a>
+        <details class="section-menu">
+          <summary>More</summary>
+          <div class="section-menu-panel">
+            <a href="#pdf-section">PDF &amp; Documents</a>
+            <a href="#text-section">Text &amp; OCR Studio</a>
+            <a href="#web-section">Web &amp; Link Tools</a>
+            <a href="#about">About</a>
+          </div>
+        </details>
+      </nav>
+      <button class="header-search" type="button" aria-label="Search tools"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Search</span><kbd>Ctrl / ⌘ K</kbd></button>
+      <button class="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-section-menu" aria-label="Open section menu"><span aria-hidden="true">☰</span><span class="mobile-menu-label">Menu</span></button>
+      <nav class="mobile-section-menu" id="mobile-section-menu" aria-label="Website sections" hidden>
+        <a href="#home">Home</a><a href="#utilities-section">Everyday Utilities</a><a href="#image-section">Image Studio</a><a href="#audio-section">Audio Studio</a><a href="#pdf-section">PDF &amp; Documents</a><a href="#text-section">Text &amp; OCR Studio</a><a href="#web-section">Web &amp; Link Tools</a><a href="#about">About</a>
+      </nav>
+
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3.8" stroke="currentColor" stroke-width="1.7"/><path d="M12 2.5v2m0 15v2m9.5-9.5h-2m-15 0h-2m16.2-6.7-1.4 1.4M6.7 17.3l-1.4 1.4m13.4 0-1.4-1.4M6.7 6.7 5.3 5.3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19.3 15.5A8 8 0 0 1 8.5 4.7 8.2 8.2 0 1 0 19.3 15.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <span class="theme-label">Dark theme</span>
+      </button>
+    </header>
+
+    <main id="home">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-content">
+          <span class="eyebrow"><span class="eyebrow-dot"></span> A little help for your everyday</span>
+          <span class="privacy-badge"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Browser-first processing</span>
+          <h1 id="page-title">Private, Instant Web Tools for Everyday Tasks.</h1>
+          <p class="hero-copy">Everything you need. All in one.</p>
+          <p class="hero-detail">Convert, edit, calculate, and process files directly in your browser — fast, free, and with privacy-first processing.</p>
+          <div class="hero-actions"><a class="primary-link" href="#tools">Explore Tools <span aria-hidden="true">→</span></a><a class="secondary-link" href="#utilities-section">Browse Categories</a></div>
+          <div class="home-shortcuts" aria-label="Popular tools"><span>Quick picks</span><button type="button" data-home-tool="Calculator">Calculator</button><button type="button" data-home-tool="Word Counter">Word Counter</button><button type="button" data-home-tool="Unit Converter">Unit Converter</button></div>
+        </div>
+        <div class="hero-art" aria-label="A preview of Unifold tools">
+          <div class="hero-glow" aria-hidden="true"></div>
+          <div class="mini-tool-card mini-image"><span class="mini-tool-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3" stroke="currentColor" stroke-width="1.7"/><circle cx="9" cy="9" r="1.5" fill="currentColor"/><path d="m5.5 18 5-5 3.2 3 2.2-2 2.6 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>Image Studio</strong><small>Resize · Convert</small></span><span class="mini-status" aria-hidden="true">✓</span></div>
+          <div class="mini-tool-card mini-audio"><span class="mini-tool-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18V5l11-2v13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.7"/><circle cx="17" cy="16" r="3" stroke="currentColor" stroke-width="1.7"/></svg></span><span><strong>Audio Studio</strong><small>Trim · Export</small></span></div>
+          <div class="mini-tool-card mini-pdf"><span class="mini-tool-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3.5h8l4 4V20a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 20V3.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3.5v4h4M9 12h6m-6 3h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span><strong>PDF Studio</strong><small>Merge · Organize</small></span></div>
+          <div class="mini-tool-card mini-utility"><span class="mini-tool-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v5H4zM14 15h6v5h-6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><span><strong>Everyday tools</strong><small>Quick and simple</small></span></div>
+          <div class="hero-preview"><span class="preview-label">YOUR TOOLKIT</span><div class="preview-shape"><span></span><span></span><span></span><span></span></div><strong>Small tasks,<br>made simpler.</strong><div class="preview-progress"><span></span></div></div>
+        </div>
+      </section>
+      <div class="home-shelves" id="home-shelves"></div>
+
+      <section class="tools-section" id="tools" aria-labelledby="tools-title">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">Your everyday toolkit</span>
+            <h2 id="tools-title">What can we help with?</h2>
+            <p>Pick a tool and make your next task a little easier.</p>
+          </div>
+          <span class="tool-count"><span id="visible-count">22</span> useful tools</span>
+        </div>
+
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <label class="visually-hidden" for="tool-search">Search tools by name, description, or keyword</label>
+          <input id="tool-search" type="search" placeholder="Search by tool, task, or keyword..." autocomplete="off" />
+          <button class="search-clear" id="clear-search" type="button" aria-label="Clear search" hidden>Clear</button>
+          <span class="search-hint" aria-hidden="true">Ctrl / ⌘ K</span>
+        </div>
+
+        <div class="filters" role="group" aria-label="Filter tools by section">
+          <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All tools <span>22</span></button>
+          <button class="filter-button" type="button" data-filter="utilities" aria-pressed="false">Everyday Utilities</button>
+          <button class="filter-button" type="button" data-filter="image" aria-pressed="false">Image Studio</button>
+          <button class="filter-button" type="button" data-filter="audio" aria-pressed="false">Audio Studio</button>
+          <button class="filter-button" type="button" data-filter="pdf" aria-pressed="false">PDF &amp; Documents</button>
+          <button class="filter-button" type="button" data-filter="text" aria-pressed="false">Text &amp; OCR Studio</button>
+          <button class="filter-button" type="button" data-filter="web" aria-pressed="false">Web &amp; Link Tools</button>
+        </div>
+
+        <section class="tool-category-section" id="utilities-section" data-tool-section="utilities"><div class="shelf-heading"><h3>Everyday Utilities</h3><span>Everyday calculations and productivity</span></div><div class="tool-grid" data-category-grid="utilities"></div></section>
+        <section class="tool-category-section" id="image-section" data-tool-section="image"><div class="shelf-heading"><h3>Image Studio</h3><span>Local image processing</span></div><div class="tool-grid" data-category-grid="image"></div></section>
+        <section class="tool-category-section" id="audio-section" data-tool-section="audio"><div class="shelf-heading"><h3>Audio Studio</h3><span>Local audio editing and export</span></div><div class="tool-grid" data-category-grid="audio"></div></section>
+        <section class="tool-category-section" id="pdf-section" data-tool-section="pdf"><div class="shelf-heading"><h3>PDF &amp; Documents</h3><span>Local PDF and document tools</span></div><div class="tool-grid" data-category-grid="pdf"></div></section>
+        <section class="tool-category-section" id="text-section" data-tool-section="text"><div class="shelf-heading"><h3>Text &amp; OCR Studio</h3><span>Writing, Markdown, text formatting, and comparison tools.</span></div><div class="tool-grid" data-category-grid="text"></div></section>
+        <section class="tool-category-section" id="web-section" data-tool-section="web"><div class="shelf-heading"><h3>Web &amp; Link Tools</h3><span>Useful link tools</span></div><div class="tool-grid" data-category-grid="web"></div></section>
+
+        <div class="tool-grid" id="tool-grid">
+          <article class="tool-card calculator-card" data-name="Calculator" data-category="calculators" data-keywords="math arithmetic equations add subtract multiply divide" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Open Calculator">
+            <div class="card-top"><span class="tool-icon icon-violet"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M8.5 7.5h7m-7 4h.01m3.5 0h.01m3.5 0h.01m-7 4h.01m3.5 0h.01m3.5 0h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span><span class="coming-soon">Open Tool →</span></div>
+            <h3>Calculator</h3><p>Quickly handle everyday math, from simple sums to trickier equations.</p>
+          </article>
+          <article class="tool-card" data-name="Unit Converter" data-category="calculators" data-keywords="measurement length distance weight mass temperature celsius fahrenheit kilograms miles">
+            <div class="card-top"><span class="tool-icon icon-blue"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8h15m0 0-3-3m3 3-3 3M20 16H5m0 0 3-3m-3 3 3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="coming-soon">Open Tool →</span></div>
+            <h3>Unit Converter</h3><p>Convert measurements, temperatures, and more without the guesswork.</p>
+          </article>
+          <article class="tool-card" data-name="Word Counter" data-category="text" data-keywords="writing words characters sentences paragraphs count text length">
+            <div class="card-top"><span class="tool-icon icon-orange"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6.5h16M4 11.5h10M4 16.5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m17 15 3 5 1.2-2.2L23 17l-6-2Z" fill="currentColor"/></svg></span><span class="coming-soon">Open Tool →</span></div>
+            <h3>Word Counter</h3><p>Count words and characters to keep your writing just the right length.</p>
+          </article>
+          <article class="tool-card" data-name="Percentage Calculator" data-category="calculators" data-keywords="percent percentage discount sale price increase decrease ratio">
+            <div class="card-top"><span class="tool-icon icon-pink"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="16.5" cy="16.5" r="2.5" stroke="currentColor" stroke-width="1.7"/><path d="m18.5 5.5-13 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="coming-soon">Open Tool →</span></div>
+            <h3>Percentage Calculator</h3><p>Work out discounts, increases, and percentages in a few quick steps.</p>
+          </article>
+          <article class="tool-card" data-name="Timer & Stopwatch" data-category="productivity" data-keywords="time countdown focus stopwatch laps seconds minutes hours">
+            <div class="card-top"><span class="tool-icon icon-green"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="1.7"/><path d="M12 9v4l2.5 1.5M9 2h6m-3 0v3m5.5 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="coming-soon">Open Tool →</span></div>
+            <h3>Timer &amp; Stopwatch</h3><p>Stay focused, time a task, or keep track of every second.</p>
+          </article>
+          <article class="tool-card" data-name="To-do List" data-category="productivity" data-keywords="tasks checklist plans reminders organize completed active">
+            <div class="card-top"><span class="tool-icon icon-yellow"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 7 1.5 1.5L9 6m3 1h7M5 14l1.5 1.5L9 13m3 1h7M5 20l1.5 1.5L9 19m3 1h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="coming-soon">Open Tool →</span></div>
+            <h3>To-do List</h3><p>Get plans out of your head and into a clear, satisfying checklist.</p>
+          </article>
+          <article class="tool-card" data-name="Text Formatter" data-category="text" data-keywords="writing uppercase lowercase title case spaces clean trim format">
+            <div class="card-top"><span class="tool-icon icon-cyan"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M7 6v12m10-12v12M4 18h16M10 10h4m-4 4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="coming-soon">Open Tool →</span></div>
+            <h3>Text Formatter</h3><p>Clean up text and quickly switch between useful formatting styles.</p>
+          </article>
+          <article class="tool-card" data-name="QR Code Designer" data-category="web" data-keywords="qr code generator design wifi url website text email phone vcard contact customize colors download">
+            <div class="card-top"><span class="tool-icon icon-indigo"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="14" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><path d="M14 14h2v2h-2zm4 0h2m-6 4h2m2 0v2m2-5v3h-2" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><span class="coming-soon">Open Tool →</span></div>
+            <h3>QR Code Designer</h3><p>Create and customize QR codes for links, text, Wi-Fi, email, phone, and contacts.</p>
+          </article>
+          <article class="tool-card" data-name="Age Calculator" data-category="utilities" data-keywords="birthday date age years months days old">
+            <div class="card-top"><span class="tool-icon icon-violet"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h16v8H4zM3 12h18M7 12V8l2-2 2 2v4m4 0V7l2-2 2 2v5M12 4v1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>Age Calculator</h3><p>Calculate an exact age in years, months, and days.</p>
+          </article>
+          <article class="tool-card" data-name="GST Calculator" data-category="utilities" data-keywords="tax goods services tax inclusive exclusive price rate">
+            <div class="card-top"><span class="tool-icon icon-blue"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="16.5" cy="16.5" r="2.5" stroke="currentColor" stroke-width="1.7"/><path d="m18.5 5.5-13 13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>GST Calculator</h3><p>Add GST to a price or find the tax in a GST-inclusive total.</p>
+          </article>
+          <article class="tool-card" data-name="Discount Calculator" data-category="utilities" data-keywords="sale savings markdown price percent">
+            <div class="card-top"><span class="tool-icon icon-orange"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 8h9M9.5 3.5v9M5 17h7m3-1 5 5m0-5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>Discount Calculator</h3><p>See your savings and final sale price.</p>
+          </article>
+          <article class="tool-card" data-name="Date Difference" data-category="utilities" data-keywords="calendar days between dates duration interval">
+            <div class="card-top"><span class="tool-icon icon-green"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8h15m0 0-3-3m3 3-3 3M20 16H5m0 0 3-3m-3 3 3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>Date Difference</h3><p>Find the number of days between two dates.</p>
+          </article>
+          <article class="tool-card" data-name="Data Storage Converter" data-category="utilities" data-keywords="bytes bits kilobytes megabytes gigabytes terabytes storage digital">
+            <div class="card-top"><span class="tool-icon icon-indigo"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 9h8m-8 3h8m-8 3h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>Data Storage Converter</h3><p>Convert between common decimal data storage units.</p>
+          </article>
+          <article class="tool-card" data-name="Cooking Converter" data-category="utilities" data-keywords="cooking baking kitchen cups tablespoons teaspoons milliliters fluid ounces">
+            <div class="card-top"><span class="tool-icon icon-yellow"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3c1.5 2 1 3.5 0 5-1.5 2.2-2 3.5-.5 5 .8.8 1.8.8 2.5 0 1.8-2 1.2-4.6 0-6.2 3.7 2.4 5 5.2 4.5 8.1-.5 3.1-3 5.1-6.5 5.1s-6-2.1-6-5.3c0-2.2 1.2-4.3 3-5.8-.2 2.1.2 3.2 1.2 3.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>Cooking Converter</h3><p>Convert common US kitchen volume measurements.</p>
+          </article>
+          <article class="tool-card" data-name="Random Decision Picker" data-category="utilities" data-keywords="choose choice random options decide picker">
+            <div class="card-top"><span class="tool-icon icon-pink"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>Random Decision Picker</h3><p>Pick one option fairly from your list.</p>
+          </article>
+          <article class="tool-card" data-name="Quick Notes" data-category="productivity" data-keywords="notes memo jot save autosave local">
+            <div class="card-top"><span class="tool-icon icon-cyan"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14 5 5 5M4 20l4.2-.8L19 8.4 15.6 5 4.8 15.8 4 20Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>Quick Notes</h3><p>Jot down notes that autosave on this device.</p>
+          </article>
+          <article class="tool-card" data-name="Image Studio" data-category="image" data-keywords="image photo resize compress convert jpeg png webp canvas dimensions quality">
+            <div class="card-top"><span class="tool-icon icon-indigo"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3" stroke="currentColor" stroke-width="1.7"/><circle cx="9" cy="9" r="1.5" fill="currentColor"/><path d="m5.5 18 5-5 3.2 3 2.2-2 2.6 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>Image Studio</h3><p>Resize images, adjust quality, and export as PNG, JPEG, or WebP locally.</p>
+          </article>
+          <article class="tool-card" data-name="Audio Studio" data-category="audio" data-keywords="audio sound music cutter trim split merge volume fade speed waveform wav mp3 ogg webm">
+            <div class="card-top"><span class="tool-icon icon-pink"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18V5l11-2v13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.7"/><circle cx="17" cy="16" r="3" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>Audio Studio</h3><p>Trim, split, merge, adjust volume and fades, and preview audio speed with WAV export.</p>
+          </article>
+          <article class="tool-card" data-name="PDF &amp; Documents Studio" data-category="utilities" data-keywords="pdf merge split extract pages reorder rotate image jpg jpeg png text document export convert">
+            <div class="card-top"><span class="tool-icon icon-violet"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3.5h8l4 4V20a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 20V3.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3.5v4h4M9 12h6m-6 3h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>PDF &amp; Documents Studio</h3><p>Merge, split, reorder, rotate, convert, render, and extract PDF content locally.</p>
+          </article>
+          <article class="tool-card" data-name="QR Code Scanner" data-category="web" data-keywords="scan qr code camera image upload decode read">
+            <div class="card-top"><span class="tool-icon icon-indigo"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="14" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><path d="M14 14h2v2h-2zm4 0h2m-6 4h2m2 0v2m2-5v3h-2" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><span class="coming-soon">Open Tool →</span></div>            <h3>QR Code Scanner</h3><p>Scan QR codes from your camera or an image using native or fallback browser support.</p>
+          </article>
+          <article class="tool-card" data-name="Barcode Scanner" data-category="web" data-keywords="scan barcode camera image upload decode ean upc code 128">
+            <div class="card-top"><span class="tool-icon icon-orange"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5v14m3-14v14m3-14v14m3-14v14m3-14v14m3-14v14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>Barcode Scanner</h3><p>Read camera and image barcodes supported by your browser.</p>
+          </article>
+          <article class="tool-card" data-name="Barcode Generator" data-category="web" data-keywords="generate barcode code128 code39 ean13 ean8 upc itf codabar svg png product">
+            <div class="card-top"><span class="tool-icon icon-green"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5v14m3-14v14m3-14v14m3-14v14m3-14v14m3-14v14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="coming-soon">Open Tool →</span></div><h3>Barcode Generator</h3><p>Create and download genuine scannable barcodes.</p>
+          </article>
+        </div>
+        <p class="empty-state" id="empty-state" hidden>No tools found. Try a different search or category.</p>
+      </section>
+
+      <dialog class="tool-dialog" id="tool-dialog" aria-labelledby="tool-dialog-title">
+        <div id="tool-content"></div>
+      </dialog>
+
+      <dialog class="calculator-dialog" id="calculator-dialog" aria-labelledby="calculator-title">
+        <div class="calculator-heading">
+          <div><span class="section-kicker">Unifold toolkit</span><h2 id="calculator-title">Calculator</h2></div>
+          <button class="calculator-close" type="button" aria-label="Close calculator" data-calculator-close>&times;</button>
+        </div>
+        <div class="calculator-display" aria-live="polite" aria-atomic="true">
+          <div class="calculator-expression" id="calculator-expression">Ready</div>
+          <output class="calculator-value" id="calculator-value" aria-label="Calculator display">0</output>
+        </div>
+        <div class="calculator-keys" role="group" aria-label="Calculator keys">
+          <button class="calculator-key key-action" type="button" data-calculator-action="clear">C</button>
+          <button class="calculator-key key-action" type="button" data-calculator-action="delete" aria-label="Delete last digit">DEL</button>
+          <button class="calculator-key key-operator" type="button" data-calculator-value="/" aria-label="Divide">÷</button>
+          <button class="calculator-key key-operator" type="button" data-calculator-value="*" aria-label="Multiply">×</button>
+          <button class="calculator-key" type="button" data-calculator-value="7">7</button>
+          <button class="calculator-key" type="button" data-calculator-value="8">8</button>
+          <button class="calculator-key" type="button" data-calculator-value="9">9</button>
+          <button class="calculator-key key-operator" type="button" data-calculator-value="-" aria-label="Subtract">−</button>
+          <button class="calculator-key" type="button" data-calculator-value="4">4</button>
+          <button class="calculator-key" type="button" data-calculator-value="5">5</button>
+          <button class="calculator-key" type="button" data-calculator-value="6">6</button>
+          <button class="calculator-key key-operator" type="button" data-calculator-value="+" aria-label="Add">+</button>
+          <button class="calculator-key" type="button" data-calculator-value="1">1</button>
+          <button class="calculator-key" type="button" data-calculator-value="2">2</button>
+          <button class="calculator-key" type="button" data-calculator-value="3">3</button>
+          <button class="calculator-key key-equals" type="button" data-calculator-action="equals" aria-label="Equals">=</button>
+          <button class="calculator-key key-zero" type="button" data-calculator-value="0">0</button>
+          <button class="calculator-key" type="button" data-calculator-value=".">.</button>
+        </div>
+        <p class="calculator-help">Keyboard: numbers and operators · Enter to calculate · Esc to close</p>
+      </dialog>
+
+      <section class="about-strip" id="about">
+        <span class="about-spark" aria-hidden="true">✦</span>
+        <div><h2>Good tools should be for everyone.</h2><p>Unifold brings practical calculators, image, audio, PDF, writing, and link tools together. Most processing stays in your browser; PDF libraries may load from public CDNs.</p></div>
+        <a href="#tools">Explore the collection <span aria-hidden="true">→</span></a>
+      </section>
+    </main>
+
+    <footer class="site-footer"><a class="footer-brand" href="#home">Unifold</a><span>Everything you need. All in one.</span><span>Free to use · Made for everyone</span></footer>
+    <button id="clear-recent" type="button" hidden></button>
+
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js"></script>
+    <script src="new-tools.js"></script>
+    <script src="color-studio.js"></script>
+    <script src="csv-viewer.js"></script>
+    <script src="chess-research.js"></script>
+    <script src="background-studio.js"></script>
+    <script src="part-a-tools.js"></script>
+    <script src="script.js"></script>
+    <script src="qr-designer.js"></script>
+  </body>
+</html>
