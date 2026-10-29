@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="theme.css" />
     <link rel="stylesheet" href="qr-designer.css" />
     <link rel="stylesheet" href="premium-polish.css" />
+    <link rel="stylesheet" href="notifications.css" />
+    <link rel="stylesheet" href="browser-push.css" />
   </head>
   <body>
     <header class="site-header">
@@ -46,13 +48,14 @@
             <a href="#text-section">Text &amp; OCR Studio</a>
             <a href="#web-section">Web &amp; Link Tools</a>
             <a href="#about">About</a>
+            <a href="#settings">Settings</a>
           </div>
         </details>
       </nav>
       <button class="header-search" type="button" aria-label="Search tools"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Search</span><kbd>Ctrl / ⌘ K</kbd></button>
       <button class="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-section-menu" aria-label="Open section menu"><span aria-hidden="true">☰</span><span class="mobile-menu-label">Menu</span></button>
       <nav class="mobile-section-menu" id="mobile-section-menu" aria-label="Website sections" hidden>
-        <a href="#home">Home</a><a href="#utilities-section">Everyday Utilities</a><a href="#image-section">Image Studio</a><a href="#audio-section">Audio Studio</a><a href="#pdf-section">PDF &amp; Documents</a><a href="#text-section">Text &amp; OCR Studio</a><a href="#web-section">Web &amp; Link Tools</a><a href="#about">About</a>
+        <a href="#home">Home</a><a href="#utilities-section">Everyday Utilities</a><a href="#image-section">Image Studio</a><a href="#audio-section">Audio Studio</a><a href="#pdf-section">PDF &amp; Documents</a><a href="#text-section">Text &amp; OCR Studio</a><a href="#web-section">Web &amp; Link Tools</a><a href="#about">About</a><a href="#settings">Settings</a>
       </nav>
 
       <button class="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
@@ -239,6 +242,24 @@
         <div><h2>Good tools should be for everyone.</h2><p>Unifold brings practical calculators, image, audio, PDF, writing, and link tools together. Most processing stays in your browser; PDF libraries may load from public CDNs.</p></div>
         <a href="#tools">Explore the collection <span aria-hidden="true">→</span></a>
       </section>
+
+      <section class="browser-push-section" id="settings" aria-labelledby="browser-push-title">
+        <div class="browser-push-card">
+          <span class="section-kicker">Your preferences</span>
+          <h2 id="browser-push-title">Browser Notifications</h2>
+          <p class="browser-push-intro">Choose whether this browser may show notifications. Permission is requested only after you press Enable. Background push requires a secure server subscription service, which is not currently configured for this static site.</p>
+          <div class="browser-push-status" aria-live="polite">
+            <strong>Permission:</strong> <span id="browser-push-permission">Checking support…</span><br>
+            <strong>Background delivery:</strong> <span id="browser-push-delivery">Not configured</span>
+          </div>
+          <p class="browser-push-help" id="browser-push-help">No notification permission is requested automatically. If permission is blocked, change it in this site’s browser settings.</p>
+          <div class="tool-actions browser-push-actions">
+            <button class="tool-button primary" type="button" id="browser-push-enable">Enable browser notifications</button>
+            <button class="tool-button" type="button" id="browser-push-test" hidden>Test local notification</button>
+          </div>
+          <p class="browser-push-privacy">Privacy: this page does not upload your files or tool inputs for notifications. A real push subscription and its server-side storage are not implemented yet.</p>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer"><a class="footer-brand" href="#home">Unifold</a><span>Everything you need. All in one.</span><span>Free to use · Made for everyone</span></footer>
@@ -249,6 +270,8 @@
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script src="https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js"></script>
+    <script src="notifications.js"></script>
+    <script src="browser-push.js"></script>
     <script src="new-tools.js"></script>
     <script src="color-studio.js"></script>
     <script src="csv-viewer.js"></script>
